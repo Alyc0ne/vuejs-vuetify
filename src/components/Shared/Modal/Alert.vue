@@ -1,0 +1,42 @@
+<template>
+    <div class="notify" data-notification-status="success">ทดสอบบบบ</div>
+</template>
+<script>
+export default {
+  name: 'Alert'
+}
+</script>
+<style scoped>
+body {
+    background-color: skyblue;
+}
+.notify {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  color: #fff;
+  line-height: 1.3;
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.35);
+  max-width: 350px;
+  margin: 20px;
+  bottom: 0;
+  right: 0;
+}
+.bottom-right.do-show {
+  animation: slide-in-right 1s ease-in-out forwards, slide-in-right 1s ease-in-out reverse forwards 3s;
+}
+.notify[data-notification-status="success"] {
+  background-color: #66bb6a;
+}
+.notify[data-notification-status="success"]:before {
+  content: "";
+  display: block;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  margin-right: 20px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M12 3.984c4.407 0 8.016 3.609 8.016 8.016 0 4.406-3.608 8.016-8.016 8.016S3.984 16.407 3.984 12 7.593 3.984 12 3.984m0-2C6.478 1.984 1.984 6.477 1.984 12c0 5.521 4.493 10.016 10.016 10.016S22.016 17.522 22.016 12c0-5.523-4.495-10.016-10.016-10.016zm0 2c4.407 0 8.016 3.609 8.016' fill='%233A813D'/%3E%3Cpath d='M10.477,13.136l5.085-5.085l1.406,1.406l-6.492,6.492l-3.446-3.445l1.406-1.406L10.477,13.136z' fill='%233A813D'/%3E%3C/svg%3E"), center/cover no-repeat;
+}
+</style>

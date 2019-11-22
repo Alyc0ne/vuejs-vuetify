@@ -1,0 +1,32 @@
+@media (max-width: 767.98px){
+    .mobile-overlay.mobile-nav-open {
+        display: block;
+        position: fixed;
+        background-color: rgba(0,0,0,0.3);
+        height: 100%;
+        width: 100%;
+        z-index: 300;
+    }
+    .toggle-mobile-nav {
+        display: flex;
+        align-items: center;
+    }
+    .container-fluid {
+        padding-top: 0px !important;
+    }
+    .block-menu {
+        height: 50px;
+    }
+    .nav-sidebar {
+      left: -220px;
+    }
+}
+
+@media (max-width: 1199px) and (min-width: 768px){
+    .nav-sidebar:not(.sidebar-expanded-mobile) {
+        width: 50px;
+    }
+    .LinkSidebar {
+        display: none;
+    }
+}
