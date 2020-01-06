@@ -39,9 +39,9 @@
                   <th class="text-right">ราคาขาย</th>
                 </tr>
               </thead>
-              <tbody >
+              <tbody v-if="GoodsObj === null">
                 <tr v-for="item in GoodsObj" :key="item.name">
-                  <td></td>
+                  <td><v-btn color="primary" dark v-on="on" @click="11()">Edit</v-btn></td>
                   <td>{{ item.GoodsNo }}</td>
                   <td>{{ item.GoodsName }}</td>
                   <td>{{  }}</td>
@@ -49,12 +49,12 @@
                   <td class="text-right">{{ item.GoodsPrice }}</td>
                 </tr>
               </tbody>
-
-              <!-- <tbody v-else>
+              <tbody v-else>
                 <tr>
+                  <v-btn color="primary" dark v-on="on" @click.stop="dialog = true">Edit</v-btn>
                   <td class="text-center" colspan="6"><u><b>ไม่มีข้อมูลสินค้าในระบบ</b></u></td>
                 </tr>
-              </tbody> -->
+              </tbody>
             </template>
           </v-simple-table>
         </div>

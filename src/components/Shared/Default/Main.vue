@@ -32,7 +32,7 @@
                       </button>
                   </div>
                   <div class="col-6 d-inline-flex flex-wrap justify-content-lg-end pa-0" id='menuRight' >
-                    <ManageDocModal />
+                    <ManageGoodsModal :method="reLoadData" v-if="this.$router.currentRoute.name == 'Goods'" />
                     <!-- <button type="button" class="btn btn-dark" data-toggle="modal" v-bind:data-target="'#Manage' + $store.getters.SystemName + 'Modal'" @click="GenRunningNumber"><i class="fas fa-plus"></i> New {{ $store.getters.SystemName }}</button> -->
                   </div>
               </div>
@@ -43,11 +43,11 @@
   </div>
 </template>
 <script>
-import ManageDocModal from '@/components/Shared/Modal/ManageDocModal'
+import ManageGoodsModal from '@/components/Shared/Modal/ManageGoodsModal'
 export default {
   name: 'leftmenu',
   components: {
-    ManageDocModal
+    ManageGoodsModal
   },
   data () {
     //this.SetSystemName(this.$router.currentRoute.name)
@@ -90,7 +90,11 @@ export default {
         this.paddingSidebar = -220
         this.isSideBar = false
       }
-    }//,
+    },
+    reLoadData: function (e) {
+      console.log('reLoadData Success !!')
+    }
+    //,
     // GenRunningNumber: function (action) {
     //   this.$store.dispatch('GenRunningNumber')
     // },
