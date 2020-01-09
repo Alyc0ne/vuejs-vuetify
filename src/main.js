@@ -3,6 +3,9 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import router from './router'
 import axios from 'axios'
+import JQuery from 'jquery'
+
+// window.$ = JQuery
 
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 

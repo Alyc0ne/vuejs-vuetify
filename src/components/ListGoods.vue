@@ -1,5 +1,24 @@
 <template>
  <div class="block-content">
+  <div id="my-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close">&times;</span>
+        <h2>Modal Header</h2>
+      </div>
+      <div class="modal-body">
+        <p>This is my modal</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla repellendus nisi, sunt consectetur ipsa velit
+          repudiandae aperiam modi quisquam nihil nam asperiores doloremque mollitia dolor deleniti quibusdam nemo
+          commodi ab.</p>
+      </div>
+      <div class="modal-footer">
+        <h3>Modal Footer</h3>
+      </div>
+    </div>
+  </div>
+
+
     <div class='block-menu' style="border-bottom:none;margin-right:10px;margin-left:10px">
         <div class='row' style="margin:10px;">
             <div class="col-md-12 col-lg-6 d-flex">
@@ -51,7 +70,7 @@
               </tbody>
               <tbody v-else>
                 <tr>
-                  <v-btn color="primary" dark v-on="on" @click.stop="dialog = true">Edit</v-btn>
+                  <v-btn color="primary" dark v-on="on" @click="newModal">ADD</v-btn>
                   <td class="text-center" colspan="6"><u><b>ไม่มีข้อมูลสินค้าในระบบ</b></u></td>
                 </tr>
               </tbody>
@@ -62,6 +81,8 @@
           <v-pagination v-model="thisPage" @input="GetGoodData" :circle="true" :length="GoodsPagination" prev-icon="mdi-menu-left" next-icon="mdi-menu-right"></v-pagination>
         </div>
     </div>
+
+  <button id="modal-btn" class="button">Click Here</button>
 </div>
 </template>
 
@@ -71,6 +92,9 @@
 
 <script>
 export default {
+  props: {
+    method: { type: Function },
+  },
   name: 'hello',
   data () {
     this.GetGoodData()
@@ -85,7 +109,8 @@ export default {
         { text : 'All' },
         { text : 'GoodsNo' },
         { text : 'GoodsName' }
-      ]
+      ],
+      editmode: false
     }
   },
   methods: {
@@ -107,9 +132,46 @@ export default {
     },
     rkk: function name(x) {
       this.objSearch.thisFilter = x
+    },
+    newModal(){
+        this.editmode = false;
+        //this.form.reset();
+        $('#addNew').modal('show');
     }
   }
 }
+
+// Get DOM Elements
+const modal = document.querySelector('#my-modal');
+const modalBtn = document.querySelector('#modal-btn');
+const closeBtn = document.querySelector('.close');
+
+// Events
+$(document).on('click', '#modal-btn', function () {
+  $('#my-modal').attr('display', 'block');
+  // modal.style.display = 'block';
+});
+// modalBtn.addEventListener('click', openModal);
+// closeBtn.addEventListener('click', closeModal);
+// window.addEventListener('click', outsideClick);
+
+// Open
+// function openModal() {
+//   modal.style.display = 'block';
+// }
+
+// Close
+function closeModal() {
+  modal.style.display = 'none';
+}
+
+// Close If Outside Click
+function outsideClick(e) {
+  if (e.target == modal) {
+    modal.style.display = 'none';
+  }
+}
+
 </script>
 <style scoped>
 .transac-pos {

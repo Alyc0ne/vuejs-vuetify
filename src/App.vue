@@ -29,4 +29,5 @@ export default {
 @import './assets/styles/design.css';
 @import './assets/styles/site.css';
 @import './assets/styles/mediaControl.css';
+@import './assets/styles/modal.css';
 </style>
