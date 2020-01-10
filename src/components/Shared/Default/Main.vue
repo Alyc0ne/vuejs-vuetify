@@ -32,18 +32,30 @@
                       </button>
                   </div>
                   <div class="col-6 d-inline-flex flex-wrap justify-content-lg-end pa-0" id='menuRight' >
-                    <ManageGoodsModal :method="reLoadData" v-if="this.$router.currentRoute.name == 'Goods'" />
-                    <!-- <button type="button" class="btn btn-dark" data-toggle="modal" v-bind:data-target="'#Manage' + $store.getters.SystemName + 'Modal'" @click="GenRunningNumber"><i class="fas fa-plus"></i> New {{ $store.getters.SystemName }}</button> -->
+                    <ManageGoodsModal v-bind:infoModal="this.infoModal" v-if="this.$router.currentRoute.name == 'Goods'" />
+                    <v-btn color="primary" id="modal-btn" dark @click="newModal('Goods')" style="margin: 0.4em;">New</v-btn>
+                    <!-- <ManageGoodsModal isModalVisible="this.isModalVisible" v-if="this.$router.currentRoute.name == 'Goods'" /> -->
+                    <button type="button" class="btn btn-dark" data-toggle="modal" v-bind:data-target="'#Manage' + $store.getters.SystemName + 'Modal'"><i class="fas fa-plus"></i> New {{ $store.getters.SystemName }}</button>
                   </div>
               </div>
             </div>
         </div>
-      <router-view></router-view>
+      <router-view :method="editModal"></router-view>
     </div>
   </div>
 </template>
 <script>
 import ManageGoodsModal from '@/components/Shared/Modal/ManageGoodsModal'
+
+//Modal Control
+// $(document).on('click', '#modal-btn', function () {
+//   $('#my-modal').css('display','block')
+// });
+//Close Modal
+$(document).on('click', '.close, .closeModal', function () {
+  $('#my-modal').css('display','none')
+});
+
 export default {
   name: 'leftmenu',
   components: {
@@ -55,7 +67,11 @@ export default {
       isSystem: this.$router.currentRoute.name,
       isSideBar: false,
       paddingSidebar: '',
-      windowWidth: 0
+      windowWidth: 0,
+      infoModal: {
+        Name: '',
+        isEdit: false
+      }
     }
   },
   watch: {
@@ -93,6 +109,22 @@ export default {
     },
     reLoadData: function (e) {
       console.log('reLoadData Success !!')
+    },
+    newModal: function (e) {
+      // var e = this.$store.dispatch('GenRunningNumber')
+      console.log(e)
+      // this.infoModal.Name = e
+      // this.infoModal.isEdit = false
+      // $('#my-modal').css('display','block')
+    },
+    editModal: function (e) {
+      this.infoModal.Name = e.Name
+      this.infoModal.isEdit = e.isEdit
+      $('#my-modal').css('display','block')
+      //this.isModalVisible = e
+    },
+    closeModal: function () {
+      $('#my-modal').css('display','none')
     }
     //,
     // GenRunningNumber: function (action) {

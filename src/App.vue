@@ -10,10 +10,11 @@
 <script>
 import Header from '@/components/Shared/Default/Header'
 import Main from '@/components/Shared/Default/Main'
+import {store} from '@/store/'
 
 export default {
   name: 'App',
-
+  store,
   components: {
     Header,
     Main

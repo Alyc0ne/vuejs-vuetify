@@ -1,24 +1,5 @@
 <template>
  <div class="block-content">
-  <div id="my-modal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span class="close">&times;</span>
-        <h2>Modal Header</h2>
-      </div>
-      <div class="modal-body">
-        <p>This is my modal</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla repellendus nisi, sunt consectetur ipsa velit
-          repudiandae aperiam modi quisquam nihil nam asperiores doloremque mollitia dolor deleniti quibusdam nemo
-          commodi ab.</p>
-      </div>
-      <div class="modal-footer">
-        <h3>Modal Footer</h3>
-      </div>
-    </div>
-  </div>
-
-
     <div class='block-menu' style="border-bottom:none;margin-right:10px;margin-left:10px">
         <div class='row' style="margin:10px;">
             <div class="col-md-12 col-lg-6 d-flex">
@@ -50,7 +31,7 @@
             <template v-slot:default>
               <thead>
                 <tr>
-                  <th class="text-center">#</th>
+                  <th class="text-center w_10">#</th>
                   <th class="text-left">รหัสสินค้า</th>
                   <th class="text-left">ชื่อสินค้า</th>
                   <th class="text-left">หน่วยนับสินค้า</th>
@@ -58,9 +39,13 @@
                   <th class="text-right">ราคาขาย</th>
                 </tr>
               </thead>
-              <tbody v-if="GoodsObj === null">
+              <!-- <tbody v-if="GoodsObj === null"> -->
+                <tbody>
                 <tr v-for="item in GoodsObj" :key="item.name">
-                  <td><v-btn color="primary" dark v-on="on" @click="11()">Edit</v-btn></td>
+                  <td class="text-center w_10">
+                    <v-icon color="red" left @click="edit('Goods')">mdi-pencil</v-icon>
+                    <v-icon left>mdi-delete</v-icon>
+                  </td>
                   <td>{{ item.GoodsNo }}</td>
                   <td>{{ item.GoodsName }}</td>
                   <td>{{  }}</td>
@@ -68,12 +53,11 @@
                   <td class="text-right">{{ item.GoodsPrice }}</td>
                 </tr>
               </tbody>
-              <tbody v-else>
+              <!-- <tbody v-else>
                 <tr>
-                  <v-btn color="primary" dark v-on="on" @click="newModal">ADD</v-btn>
                   <td class="text-center" colspan="6"><u><b>ไม่มีข้อมูลสินค้าในระบบ</b></u></td>
                 </tr>
-              </tbody>
+              </tbody> -->
             </template>
           </v-simple-table>
         </div>
@@ -81,8 +65,6 @@
           <v-pagination v-model="thisPage" @input="GetGoodData" :circle="true" :length="GoodsPagination" prev-icon="mdi-menu-left" next-icon="mdi-menu-right"></v-pagination>
         </div>
     </div>
-
-  <button id="modal-btn" class="button">Click Here</button>
 </div>
 </template>
 
@@ -115,7 +97,7 @@ export default {
   },
   methods: {
     GetGoodData: function (pageNumber) {
-      this.$http.get('http://127.0.0.1:8000/api/TestAPI?page=' + pageNumber)
+      this.$http.get(this.$api + 'TestAPI?page=' + pageNumber)
         .then((result) => {
           this.GoodsObj = result.data.data
           this.GoodsPagination = result.data.last_page
@@ -133,10 +115,12 @@ export default {
     rkk: function name(x) {
       this.objSearch.thisFilter = x
     },
-    newModal(){
-        this.editmode = false;
-        //this.form.reset();
-        $('#addNew').modal('show');
+    edit(){
+      var objEdit = {
+        Name: 'Goods',
+        isEdit: true
+      }
+      this.method(objEdit)
     }
   }
 }
@@ -147,23 +131,9 @@ const modalBtn = document.querySelector('#modal-btn');
 const closeBtn = document.querySelector('.close');
 
 // Events
-$(document).on('click', '#modal-btn', function () {
-  $('#my-modal').attr('display', 'block');
-  // modal.style.display = 'block';
-});
 // modalBtn.addEventListener('click', openModal);
 // closeBtn.addEventListener('click', closeModal);
 // window.addEventListener('click', outsideClick);
-
-// Open
-// function openModal() {
-//   modal.style.display = 'block';
-// }
-
-// Close
-function closeModal() {
-  modal.style.display = 'none';
-}
 
 // Close If Outside Click
 function outsideClick(e) {

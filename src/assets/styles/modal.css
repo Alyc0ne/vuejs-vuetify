@@ -30,9 +30,11 @@
 .modal {
   display: none;
   position: fixed;
-  z-index: 1;
-  left: 0;
+  z-index: 9999;
   top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   height: 100%;
   width: 100%;
   overflow: auto;
@@ -40,7 +42,7 @@
 }
 
 .modal-content {
-  margin: 10% auto;
+  margin: 4% auto;
   width: 60%;
   box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
   animation-name: modalopen;
@@ -53,32 +55,37 @@
 }
 
 .modal-header {
-  background: var(--modal-color);
-  padding: 15px;
-  color: #fff;
+  /* background: var(--modal-color); */
+  background: white;
+  padding: 1rem;
+  color: #000000;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+  border-bottom: 1px solid #e9ecef;
 }
 
 .modal-body {
   padding: 10px 20px;
   background: #fff;
+  border-bottom: 1px solid #e9ecef;
 }
 
 .modal-footer {
-  background: var(--modal-color);
+  background: white;
   padding: 10px;
-  color: #fff;
-  text-align: center;
+  color: #000000;
+  text-align: right;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
 }
 
 .close {
-  color: #ccc;
+  color: #000;
   float: right;
   font-size: 30px;
-  color: #fff;
+  opacity: .5;
+  padding: 1rem;
+  margin: -1.2rem -1rem -1rem auto;
 }
 
 .close:hover,
@@ -86,6 +93,7 @@
   color: #000;
   text-decoration: none;
   cursor: pointer;
+  opacity: .85;
 }
 
 @keyframes modalopen {
