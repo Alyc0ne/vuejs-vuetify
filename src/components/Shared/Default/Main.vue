@@ -3,19 +3,19 @@
     <div class="nav-sidebar" :style="{ left : paddingSidebar + 'px' }">
         <div class="nav-sidebar-inner-scroll">
             <ul class="sidebar-top-level-items">
-                <li @click="ActiveLink('dashboard')" :class="{ navSidebarActive : isSystem === 'dashboard'}">
-                    <router-link to="/"><i class="fas fa-chart-line"><span class="LinkSidebar" :class="{ linkActive : isSystem === 'dashboard' }">Dashboard</span></i></router-link>
+                <li @click="ActiveLink('dashboard')" :class="{ navSidebarActive : systemName === 'dashboard'}">
+                    <router-link to="/"><i class="fas fa-chart-line"><span class="LinkSidebar" :class="{ linkActive : systemName === 'dashboard' }">Dashboard</span></i></router-link>
                 </li>
-                <li @click="ActiveLink('pos')" :class="{ navSidebarActive : isSystem === 'pos'}">
+                <li @click="ActiveLink('pos')" :class="{ navSidebarActive : systemName === 'pos'}">
                     <router-link to="pos"><i class="fas fa-cash-register"><span class="LinkSidebar">POS</span></i></router-link>
                 </li>
                 <!-- <li>
                     <router-link to="dashboard/1">Unit</router-link>
                 </li> -->
-                <li @click="ActiveLink('Goods')" :class="{ navSidebarActive : isSystem === 'Goods'}">
+                <li @click="ActiveLink('Goods')" :class="{ navSidebarActive : systemName === 'Goods'}">
                     <router-link to="Goods" @click="ActiveLink('Goods')"><i class="fas fa-cubes"><span class="LinkSidebar">Goods</span></i></router-link>
                 </li>
-                <li @click="ActiveLink('teststate')" :class="{ navSidebarActive : isSystem === 'teststate'}">
+                <li @click="ActiveLink('teststate')" :class="{ navSidebarActive : systemName === 'teststate'}">
                     <router-link to="teststate" @click="ActiveLink('teststate')"><i class="fas fa-cubes"><span class="LinkSidebar">State</span></i></router-link>
                 </li>
             </ul>
@@ -33,9 +33,9 @@
                   </div>
                   <div class="col-6 d-inline-flex flex-wrap justify-content-lg-end pa-0" id='menuRight' >
                     <ManageGoodsModal v-bind:infoModal="this.infoModal" v-if="this.$router.currentRoute.name == 'Goods'" />
-                    <v-btn color="primary" id="modal-btn" dark @click="newModal('Goods')" style="margin: 0.4em;">New</v-btn>
+                    <v-btn color="primary" id="modal-btn" dark @click="newModal('Goods')" style="margin: 0.4em;" v-if="this.isShowButton">New {{ this.systemName }}</v-btn>
                     <!-- <ManageGoodsModal isModalVisible="this.isModalVisible" v-if="this.$router.currentRoute.name == 'Goods'" /> -->
-                    <button type="button" class="btn btn-dark" data-toggle="modal" v-bind:data-target="'#Manage' + $store.getters.SystemName + 'Modal'"><i class="fas fa-plus"></i> New {{ $store.getters.SystemName }}</button>
+                    <!-- <button type="button" class="btn btn-dark" data-toggle="modal" v-bind:data-target="'#Manage' + $store.getters.SystemName + 'Modal'"><i class="fas fa-plus"></i> New {{ $store.getters.SystemName }}</button> -->
                   </div>
               </div>
             </div>
@@ -64,7 +64,8 @@ export default {
   data () {
     //this.SetSystemName(this.$router.currentRoute.name)
     return {
-      isSystem: this.$router.currentRoute.name,
+      systemName: this.$router.currentRoute.name,
+      isShowButton: false,
       isSideBar: false,
       paddingSidebar: '',
       windowWidth: 0,
@@ -93,7 +94,16 @@ export default {
   },
   methods: {
     ActiveLink: function (urlRouter) {
-      this.isSystem = urlRouter
+      this.systemName = urlRouter
+
+      switch (urlRouter) {
+        case "Goods":
+          this.isShowButton = true
+          break;
+        default:
+          this.isShowButton = false
+          break;
+      }
     },
     openSideBar: function (e) {
       if (e) {
@@ -111,7 +121,7 @@ export default {
       console.log('reLoadData Success !!')
     },
     newModal: function (e) {
-      // var e = this.$store.dispatch('GenRunningNumber')
+      var e = this.$store.dispatch('GenRunningNumber')
       console.log(e)
       // this.infoModal.Name = e
       // this.infoModal.isEdit = false

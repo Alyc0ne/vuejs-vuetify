@@ -1,5 +1,10 @@
 <template>
-  <v-app>
+  <v-app style="background: none;">
+     <div class="text-center">
+      <v-overlay :value="overlay" style="z-index:199">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
+    </div>
     <Header />
       <div class="layout-page page-with-contextual-sidebar">
         <Main />
@@ -21,8 +26,15 @@ export default {
   },
 
   data: () => ({
-    //
+    overlay: false,
   }),
+  watch: {
+    overlay (val) {
+      val && setTimeout(() => {
+        this.overlay = false
+      }, 3000)
+    },
+  },
 };
 </script>
 

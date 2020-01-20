@@ -79,7 +79,8 @@ export default {
   },
   name: 'hello',
   data () {
-    this.GetGoodData()
+    this.$store.dispatch('GetGoodsList', pageNumber)
+    //this.GetGoodData()
     return {
       GoodsObj: [],
       GoodsPagination: 0,
@@ -95,14 +96,17 @@ export default {
       editmode: false
     }
   },
+  watch: {
+  },
   methods: {
     GetGoodData: function (pageNumber) {
-      this.$http.get(this.$api + 'TestAPI?page=' + pageNumber)
-        .then((result) => {
-          this.GoodsObj = result.data.data
-          this.GoodsPagination = result.data.last_page
-          this.thisPage = result.data.current_page
-        })
+      console.log(this.$store.dispatch('GetGoodsList', pageNumber))
+      // this.$http.get(this.$api + 'TestAPI?page=' + pageNumber)
+      //   .then((result) => {
+      //     this.GoodsObj = result.data.data
+      //     this.GoodsPagination = result.data.last_page
+      //     this.thisPage = result.data.current_page
+      //   })
     },
     GetGoodDataBySearch: function () {
       this.$http.post('http://127.0.0.1:8000/api/BindLoadGoods', this.objSearch)
@@ -144,7 +148,7 @@ function outsideClick(e) {
 
 </script>
 <style scoped>
-.transac-pos {
+/* .transac-pos {
   position:relative;
   width:100%;
 }
@@ -160,14 +164,17 @@ function outsideClick(e) {
   white-space: nowrap;
   max-width: 100px;
   overflow: hidden;
+} */
+.theme--light.v-data-table.v-data-table--fixed-header thead th {
+  background-color:#2C3E50;
+  color: whitesmoke;
+  height: 40px;
+  font-size: 14px;
 }
-tr:not(:last-child).transac-posDetail {
-  height: 30px;
-  border-bottom: solid 1px black;
+.theme--light.v-data-table tbody tr td{
+  height: 32px;
 }
-tr:last-child.transac-posDetail  {
-  height: 30px;
-}
+
 .transac-pagination {
   /* justify-content: center; */
   float: right;
@@ -180,4 +187,7 @@ i {
   pointer-events: none;
   opacity: 0.6;
 }
+/* tr:nth-of-type(even) {
+  background-color: rgba(0,0,0,.05);
+} */
 </style>
