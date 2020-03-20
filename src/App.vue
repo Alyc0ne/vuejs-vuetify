@@ -1,7 +1,7 @@
 <template>
   <v-app style="background: none;">
      <div class="text-center">
-      <v-overlay :value="overlay" style="z-index:199">
+      <v-overlay :value="true" id='Loading' style="z-index:199">
         <v-progress-circular indeterminate size="64"></v-progress-circular>
       </v-overlay>
     </div>
@@ -24,18 +24,13 @@ export default {
     Header,
     Main
   },
-
-  data: () => ({
-    overlay: false,
-  }),
-  watch: {
-    overlay (val) {
-      val && setTimeout(() => {
-        this.overlay = false
-      }, 3000)
-    },
-  },
 };
+
+$(document).ready(function () {
+  setTimeout(() => {
+    $('#Loading').css('display', 'none');
+  }, 500);
+});
 </script>
 
 <style>

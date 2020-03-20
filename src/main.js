@@ -13,6 +13,20 @@ Vue.config.productionTip = false
 Vue.prototype.$http = axios
 Vue.prototype.$api = 'http://127.0.0.1:8000/api/'
 
+Vue.mixin({
+  methods: {
+    Loading: function (params) {
+      if (params) {
+        $('#Loading').css('display', 'flex');
+      } else {
+        setTimeout(() => {
+          $('#Loading').css('display', 'none');
+        }, 500);
+      }
+    }
+  }
+})
+
 new Vue({
   vuetify,
   router,

@@ -1,11 +1,5 @@
 <template>
     <div id="header">
-        <div class='window-overlay'>
-        <div class="lds-ripple">
-            <div></div>
-            <div></div>
-        </div>
-    </div>
     <header class="navbar navbar-header navbar-expand-sm js-navbar" data-qa-selector="navbar">
         <!-- <a class="sr-only gl-accessibility" href="#content-body" tabindex="1">Skip to content</a> -->
         <div class="container-fluid">
@@ -63,3 +57,7 @@ export default {
   }
 }
 </script>
+<style scoped>
+
+
+</style>

@@ -7,13 +7,13 @@
       </div>
         <div class="modal-body">
           <v-form ref="form">
-            <v-text-field ref="GoodsNo" v-model="obj.GoodsNo" label="GoodsNo" outlined dense disabled></v-text-field>
+            <v-text-field ref="GoodsNo" v-model="this.infoModal.objData.GoodsNo" label="GoodsNo" outlined dense disabled></v-text-field>
             <v-checkbox v-model="obj.IsBarcode" :label="'ใช้งานบาร์โค้ด'" class="mt-0 pt-0" style="height:40px;" @click="SetIsBarcode($event)"></v-checkbox>
-            <v-text-field ref="GoodsBarcode" v-model="obj.GoodsBarcode" label="GoodsBarcode" outlined dense :disabled="!obj.IsBarcode" :autofocus="obj.IsBarcode" autocomplete="off"></v-text-field>
-            <v-text-field ref="GoodsName" v-model="obj.GoodsName" label="* GoodsName" outlined dense :rules="[() => !!obj.GoodsName || 'กรุณากรอกชื่อสินค้า']" autocomplete="off"></v-text-field>
-            <v-text-field ref="GoodsCost" v-model="obj.GoodsCost" label="* GoodsCost" outlined dense :rules="[() => !!obj.GoodsCost || 'กรุณากรอกต้นทุนสินค้า']" @keypress="validateNumber($event)" @change="numberFormat('GoodsCost', obj.GoodsCost, 2)" autocomplete="off"></v-text-field>
-            <v-text-field ref="GoodsPrice" v-model="obj.GoodsPrice" label="* GoodsPrice" outlined dense :rules="[() => !!obj.GoodsPrice || 'กรุณากรอกราคาสินค้า']" @keypress="validateNumber($event)" @change="numberFormat('GoodsPrice', obj.GoodsPrice, 2)" autocomplete="off"></v-text-field>
-            <v-select v-model="itemsUnitDefault" :items="itemsUnit" item-text="UnitName" item-value="UnitID" label="UnitName" dense outlined @change="SetUnitSelected($event)"></v-select>
+            <v-text-field ref="GoodsBarcode" v-model="!this.infoModal.isEdit ? obj.GoodsBarcode : this.infoModal.objData.GoodsBarcode" label="GoodsBarcode" outlined dense :disabled="!obj.IsBarcode" :autofocus="obj.IsBarcode" autocomplete="off"></v-text-field>
+            <v-text-field ref="GoodsName" v-model="!this.infoModal.isEdit ? obj.GoodsName : this.infoModal.objData.GoodsName" label="* GoodsName" outlined dense :rules="[() => !this.infoModal.isEdit ? !!obj.GoodsName : !!this.infoModal.objData.GoodsName || 'กรุณากรอกชื่อสินค้า']" autocomplete="off"></v-text-field>
+            <v-text-field ref="GoodsCost" v-model="!this.infoModal.isEdit ? obj.GoodsCost : this.infoModal.objData.GoodsCost" label="* GoodsCost" outlined dense :rules="[() => !this.infoModal.isEdit ? !!obj.GoodsCost : !!this.infoModal.objData.GoodsCost || 'กรุณากรอกต้นทุนสินค้า']" @keypress="validateNumber($event)" @change="numberFormat('GoodsCost', !this.infoModal.isEdit ? obj.GoodsPrice : this.infoModal.objData.GoodsPrice, 2)" autocomplete="off"></v-text-field>
+            <v-text-field ref="GoodsPrice" v-model="!this.infoModal.isEdit ? obj.GoodsPrice : this.infoModal.objData.GoodsPrice" label="* GoodsPrice" outlined dense :rules="[() => !this.infoModal.isEdit ? !!obj.GoodsPrice : !!this.infoModal.objData.GoodsPrice || 'กรุณากรอกราคาสินค้า']" @keypress="validateNumber($event)" @change="numberFormat('GoodsPrice', !this.infoModal.isEdit ? obj.GoodsPrice : this.infoModal.objData.GoodsPrice, 2)" autocomplete="off"></v-text-field>
+            <v-select v-model="!this.infoModal.isEdit ? itemsUnitDefault : this.infoModal.objData.itemsUnitDefault" :items="this.infoModal.objData.itemsUnit" item-text="UnitName" return-object label="UnitName" dense outlined @change="SetUnitSelected($event)" :rules="[() => !this.infoModal.isEdit ? !!obj.UnitID : !!this.infoModal.objData.itemsUnitDefault || 'กรุณาเลือกหน่วยนับ']"></v-select>
           </v-form>  
         </div>
         <div class="modal-footer">
@@ -111,10 +111,10 @@ export default {
   name: 'ManageGoodsModal',
   data () {
     return {
+      currentRoute: this.$router.currentRoute.name,
       Action: '',
       obj: {
         IsBarcode: false,
-        UnitID: ''
       },
       dialog: false,
       notifications: false,
@@ -136,35 +136,42 @@ export default {
     // },
   },
   mounted () {
+    this.$refs.GoodsName.focus()
     //this.obj.GoodsNo = 'GO201911-25',
-    //this.itemsDefault = this.items[0] //this.$http.get(this.$api + 'GetUnit')
+    // this.itemsDefault = this.$http.get(this.$api + 'GetUnit') //this.items[0] //
     // this.obj.GoodsNo = this.$http.get(this.$api + 'GetRunningNumber/Goods')
   },
   methods: {
     GenerateData: function () {
-      this.$http.get(this.$api + 'GenerateData/Goods')
+      this.$http.get(this.$api + 'GenerateData/' + this.$router.currentRoute.name)
       .then((response) => {
         this.obj.GoodsNo = response.data.RunningNumber.original
         this.itemsUnit = response.data.Unit
         this.itemsUnitDefault = response.data.Unit[0].UnitID
         this.$refs.GoodsName.focus()
-        console.log(this.obj)
       })
     },
     BindManage: function () {
-      if (this.$refs.form.validate()) {
+      if (!this.$refs.form.validate()) {
           this.snackbar = true
       } else {
         this.obj.isEdit = this.infoModal.isEdit
-      // this.obj.GoodsNo = this.$store.getters.RunningNumber
-      // this.$http.post(this.$api + 'BindManage' + this.$store.getters.SystemName, this.obj)
-        this.$http.post(this.$api + 'BindManageGoods', this.obj)
+        this.obj.GoodsNo = this.infoModal.objData.GoodsNo
+
+        if (this.infoModal.isEdit) {
+          this.obj.IsBarcode = this.infoModal.objData.IsBarcode
+          this.obj.GoodsBarcode = this.infoModal.objData.GoodsBarcode
+          this.obj.GoodsName = this.infoModal.objData.GoodsName
+          this.obj.GoodsCost = this.infoModal.objData.GoodsCost
+          this.obj.GoodsPrice = this.infoModal.objData.GoodsPrice
+          this.obj.GoodsUnitID = this.infoModal.objData.GoodsCost
+        }
+
+        this.$http.post(this.$api + 'BindManage' + this.currentRoute, this.obj)
         .then(response => {
-          console.log(response)
-          if (response.status === "201") {
-            console.log('Success')
+          if (response.status === 201) {
             this.CloseModal()
-            this.method(response.data)
+            this.$emit('reloadData', response.data)
           } else {
             console.log('error')
           }
@@ -175,11 +182,10 @@ export default {
       }
     },
     SetIsBarcode: function (e) {
-      console.log(e)
       this.$refs.GoodsBarcode.focus()
     },
     CloseModal: function () {
-      this.dialog = false
+      $('#my-modal').css('display','none')
       this.$refs.form.reset()
     },
     validateNumber: function (e) {
@@ -203,7 +209,8 @@ export default {
       this.obj[target] = parseFloat(number).toFixed(length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     },
     SetUnitSelected: function (event) {
-      this.obj.UnitID = event
+      this.obj.UnitID = event.UnitID
+      this.obj.UnitName = event.UnitName
     }
   }
 }
